@@ -13,7 +13,7 @@ def main():
         else:
             pack.reverse()
             packs.append(pack)
-    # print(packs)
+    print(packs)
 
     path = sort_and_categorize_by_color(packs)
     if path is None:
@@ -47,7 +47,7 @@ def sort_and_categorize_by_color(source):
         if node.is_goal():
             cells = []
             while node.parent is not None:
-                cells.append([node.state])
+                cells.append(node.state)
                 node = node.parent
             cells.reverse()
             return cells
@@ -57,6 +57,7 @@ def sort_and_categorize_by_color(source):
         neighbors = list(neighbors_for_packs(node.state))
         for neighbor in neighbors:
             neighbor = list(neighbor)
+            neighbor = sorted(neighbor, key=lambda x: x[1], reverse=True)
             if not queueFrontier.contains_state(neighbor) and neighbor not in explored:
                 child = Node(state=neighbor, parent=node)
                 queueFrontier.add(child)

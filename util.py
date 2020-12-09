@@ -10,12 +10,12 @@ class Node():
             else:
                 color = pack[0][-1:]
                 value = pack[0][:-1]
-                for i in range(len(pack) - 1):
+                for i in range(1,len(pack)):
                     # if i == len(pack):
                     #     break
-                    if (pack[i+1][:-1] < value or pack[i+1][-1:] != color):
+                    if (pack[i][:-1] < value or pack[i][-1:] != color):
                         return False
-                    value = pack[i+1][:-1]
+                    value = pack[i][:-1]
         return True
 
 class StackFrontier():
