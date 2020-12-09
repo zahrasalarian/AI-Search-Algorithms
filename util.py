@@ -1,4 +1,3 @@
-
 class Node():
     def __init__(self, state, parent, action):
         self.state = state
@@ -6,7 +5,14 @@ class Node():
         self.action = action
     def is_goal(self):
         for pack in self.state:
-
+            color = pack[0][-1:]
+            value = pack[0][:-1]
+            for i in range(len(pack) - 1):
+                # if i == len(pack):
+                #     break
+                if (pack[i+1][:-1] != value or pack[-1:] != color):
+                    return False
+        return True
 
 class StackFrontier():
     def __init__(self):
