@@ -1,15 +1,11 @@
-# get input
-k, m, n = map(int, input().split())
-pack = []
-for _ in range(k):
-    pack.append(input().split())
-print(pack)
 
 class Node():
     def __init__(self, state, parent, action):
         self.state = state
         self.parent = parent
         self.action = action
+    def is_goal(self):
+        for pack in self.state:
 
 
 class StackFrontier():
