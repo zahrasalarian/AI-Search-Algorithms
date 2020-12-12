@@ -1,8 +1,10 @@
 class Node():
-    def __init__(self, state, parent,depth):
+    def __init__(self, state, parent, depth=0):
         self.state = state
         self.parent = parent
         self.depth = depth
+        self.g = 0
+        self.h = 0
         # self.action = action
     def is_goal(self):
         for pack in self.state:
