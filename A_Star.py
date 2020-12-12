@@ -59,10 +59,10 @@ def aStar(source):
             # Otherwise if it is already in the open set
             if neighbor in openset:
                 # Check if we beat the G score
-                new_g = node.G + node.move_cost(neighbor)
-                if neighbor.G > new_g:
+                new_g = node.g + 1
+                if neighbor.g > new_g:
                     # If so, update the node to have a new parent
-                    neighbor.G = new_g
+                    neighbor.g = new_g
                     neighbor.parent = node
             else:
                 # If it isn't in the open set, calculate the G and H score for the node
