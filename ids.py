@@ -68,7 +68,7 @@ def sort_and_categorize_by_color(source,limit):
 
 def neighbors_for_packs(state):
     neighbors = list()
-    # print(state)
+    print(state)
     for i in range(len(state) - 1):
         for j in range(i+1,len(state)):
             origin = None
@@ -97,9 +97,9 @@ def neighbors_for_packs(state):
                 temp_packs = deepcopy(state)
                 card = temp_packs[origin].pop(0)
                 temp_packs[destination].insert(0, card)
-                # print(temp_packs)
+                print(temp_packs)
                 neighbors.append(temp_packs)
-    # print("*********")
+    print("*********")
     return neighbors
 
 if __name__ == "__main__":
