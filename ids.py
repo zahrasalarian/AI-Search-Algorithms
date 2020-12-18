@@ -16,7 +16,7 @@ def main():
             packs.append(pack)
     print(packs)
 
-    path = ids(packs,limit)
+    path = ids(packs, limit)
     if path is None:
         print("Not found.")
     else:
@@ -52,6 +52,8 @@ def sort_and_categorize_by_color(source,limit):
                 cells.append(node.state)
                 node = node.parent
             cells.reverse()
+            if len(cells) == 0:
+                cells.append(node.state)
             return cells
         explored.append(node.state)
 

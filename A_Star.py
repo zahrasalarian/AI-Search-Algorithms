@@ -61,6 +61,8 @@ def aStar(source):
                 cells.append(node.state)
                 node = node.parent
             cells.reverse()
+            if len(cells) == 0:
+                cells.append(node.state)
             return cells
         # Remove the item from the open set
         openset.remove(node)
