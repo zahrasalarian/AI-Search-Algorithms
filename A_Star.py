@@ -22,26 +22,22 @@ def main():
         print(path)
 
 def heuristic(node):
-    # will be completed later
-    # return node.depth + 2
     state = node.state
-    color_conf = 0
-    num_conf = 0
+    conf_num = 0
     for pack in state:
-        colors = set()
-        for card in pack:
-            # color
+        if len(pack) == 0:
+            continue
+        main_color = pack[-1][-1:]
+        prev_value = int(pack[0][:-1])
+        for card in range(len(pack)-2, -1):
+            # color or value
             color = card[-1:]
-            if color not in colors:
-                colors.add(color)
-            # sort
-            index = pack.index(card)
-            for i in range(index+1, len(pack)):
-                if int(pack[i][:-1]) < int(card[:-1]):
-                    num_conf += 1
-        if len(colors) != 1:
-            color_conf += len(colors)
-    return color_conf + num_conf
+            if color != main_color or int(prev_value) < int(card[:-1]):
+                conf_num += pack.index(card)
+                break
+            else:
+                prev_value = int(card[:-1])
+    return conf_num
 def aStar(source):
     # The open and closed sets
     openset = set()

@@ -23,8 +23,8 @@ def main():
         print(path)
 
 def ids(source,limit):
-    for i in range(limit,limit + 50):
-        print(i)
+    for i in range(limit, limit + 50):
+        # print(i)
         path = sort_and_categorize_by_color(source,i)
         if path is not None:
             return path
