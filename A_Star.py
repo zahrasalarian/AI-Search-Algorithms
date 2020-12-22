@@ -28,15 +28,16 @@ def heuristic(node):
         if len(pack) == 0:
             continue
         main_color = pack[-1][-1:]
-        prev_value = int(pack[0][:-1])
-        for card in range(len(pack)-2, -1):
+        prev_value = int(pack[-1][:-1])
+        for i in range(len(pack)-1, -1, -1):
             # color or value
-            color = card[-1:]
-            if color != main_color or int(prev_value) < int(card[:-1]):
-                conf_num += pack.index(card)
+            color = pack[i][-1:]
+            if (color != main_color) or (int(prev_value) < int(pack[i][:-1])):
+                print(color)
+                conf_num += i + 1
                 break
             else:
-                prev_value = int(card[:-1])
+                prev_value = int(pack[i][:-1])
     return conf_num
 def aStar(source):
     # The open and closed sets
@@ -83,9 +84,9 @@ def aStar(source):
                 # If it isn't in the open set, calculate the G and H score for the node
                 neighbor.g = node.g + 1
                 neighbor.h = heuristic(neighbor)
-                # print(neighbor.state)
-                # print(neighbor.h)
-                # print("*********")
+                print(neighbor.state)
+                print(neighbor.h)
+                print("*********")
                 # Set the parent to our current item
                 neighbor.parent = node
                 # Add it to the set
