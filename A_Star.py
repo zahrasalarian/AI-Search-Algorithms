@@ -33,7 +33,6 @@ def heuristic(node):
             # color or value
             color = pack[i][-1:]
             if (color != main_color) or (int(prev_value) < int(pack[i][:-1])):
-                print(color)
                 conf_num += i + 1
                 break
             else:
@@ -55,7 +54,10 @@ def aStar(source):
         if node.is_goal():
             cells = []
             while node.parent is not None:
-                cells.append(node.state)
+                state = node.state
+                for pack in state:
+                    pack.reverse()
+                cells.append(state)
                 node = node.parent
             cells.reverse()
             if len(cells) == 0:
@@ -84,9 +86,9 @@ def aStar(source):
                 # If it isn't in the open set, calculate the G and H score for the node
                 neighbor.g = node.g + 1
                 neighbor.h = heuristic(neighbor)
-                print(neighbor.state)
-                print(neighbor.h)
-                print("*********")
+                # print(neighbor.state)
+                # print(neighbor.h)
+                # print("*********")
                 # Set the parent to our current item
                 neighbor.parent = node
                 # Add it to the set
