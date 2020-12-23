@@ -1,6 +1,8 @@
 from util import Node, StackFrontier, QueueFrontier
 from copy import deepcopy
 
+produced_num = 0
+explored_num = 0
 def main():
     # get input
     k, m, n = map(int, input().split())
@@ -20,6 +22,8 @@ def main():
         print("Not found.")
     else:
         print(path)
+    print("produced nodes = {}".format(produced_num))
+    print("explored nodes = {}".format(explored_num))
 
 def heuristic(node):
     state = node.state
@@ -39,6 +43,8 @@ def heuristic(node):
                 prev_value = int(pack[i][:-1])
     return conf_num
 def aStar(source):
+    global explored_num
+    global produced_num
     # The open and closed sets
     openset = set()
     closedset = set()
@@ -50,8 +56,10 @@ def aStar(source):
     while openset:
         # Find the item in the open set with the lowest G + H score
         node = min(openset, key=lambda o: o.g + o.h)
+        explored_num += 1
         # If it is the item we want, retrace the path and return it
         if node.is_goal():
+            print("goal depth = {}".format(node.depth))
             cells = []
             while node.parent is not None:
                 state = node.state
@@ -63,8 +71,6 @@ def aStar(source):
                 pack.reverse()
             cells.append(source)
             cells.reverse()
-            # if len(cells) == 0:
-            #     cells.append(node.state)
             return cells
         # Remove the item from the open set
         openset.remove(node)
@@ -72,6 +78,7 @@ def aStar(source):
         closedset.add(node)
         # Loop through the node's children/siblings
         neighbors = list(neighbors_for_packs(node.state))
+        produced_num += len(neighbors)
         for neighbor_state in neighbors:
             neighbor = Node(state=neighbor_state, parent=node, depth=node.depth + 1)
             # If it is already in the closed set, skip it
@@ -89,10 +96,6 @@ def aStar(source):
                 # If it isn't in the open set, calculate the G and H score for the node
                 neighbor.g = node.g + 1
                 neighbor.h = heuristic(neighbor)
-                # print(neighbor.state)
-                # print(neighbor.h)
-                # print("*********")
-                # Set the parent to our current item
                 neighbor.parent = node
                 # Add it to the set
                 openset.add(neighbor)
@@ -102,9 +105,8 @@ def aStar(source):
 
 def neighbors_for_packs(state):
     neighbors = list()
-    # print(state)
     for i in range(len(state) - 1):
-        for j in range(i+1,len(state)):
+        for j in range(i+1, len(state)):
             origin = None
             destination = None
             mark = 0
@@ -131,9 +133,7 @@ def neighbors_for_packs(state):
                 temp_packs = deepcopy(state)
                 card = temp_packs[origin].pop(0)
                 temp_packs[destination].insert(0, card)
-                # print(temp_packs)
                 neighbors.append(temp_packs)
-    # print("*********")
     return neighbors
 
 if __name__ == "__main__":

@@ -1,6 +1,9 @@
 from util import Node, StackFrontier, QueueFrontier
 from copy import deepcopy
 
+produced_num = 0
+explored_num = 0
+
 def main():
     # get input
     k, m, n = map(int, input().split())
@@ -14,65 +17,66 @@ def main():
         else:
             pack.reverse()
             packs.append(pack)
-    print(packs)
 
     path = ids(packs, limit)
     if path is None:
         print("Not found.")
     else:
         print(path)
+    print("produced nodes = {}".format(produced_num))
+    print("explored nodes = {}".format(explored_num))
 
 def ids(source,limit):
+    node = Node(state=source, parent=None, depth=0)
     for i in range(limit, limit + 50):
         # print(i)
-        path = sort_and_categorize_by_color(source,i)
+        path = sort_and_categorize_by_color(node, i)
         if path is not None:
+            path.insert(0, source)
             return path
         else:
             continue
+    return None
 
-def sort_and_categorize_by_color(source,limit):
-    start = Node(state=source, parent=None,depth=0)
-    stackFrontier = StackFrontier()
-    stackFrontier.add(start)
+def sort_and_categorize_by_color(source, limit):
+    global explored_num
+    global produced_num
+    node = source
 
     explored = list()
-    num_explored = 0
+    explored_num += 1
 
-    counter = 0
-    while True:
-        if stackFrontier.empty():
-            return None
-        node = stackFrontier.remove()
-        num_explored += 1
+    if node.is_goal():
+        print("goal depth = {}".format(node.depth))
+        cells = []
+        while node.parent is not None:
+            state = node.state
+            for pack in state:
+                pack.reverse()
+            cells.append(state)
+            node = node.parent
+        for pack in node.state:
+            pack.reverse()
+        cells.reverse()
+        return cells
+    explored.append(node.state)
 
-        if node.is_goal():
-            cells = []
-            while node.parent is not None:
-                cells.append(node.state)
-                node = node.parent
-            cells.reverse()
-            if len(cells) == 0:
-                cells.append(node.state)
-            return cells
-        explored.append(node.state)
+    if limit <= 0:
+        return None
+    neighbors = list(neighbors_for_packs(node.state))
+    produced_num += len(neighbors)
 
-        # Add neighbors if we haven't reached the limit
-        if node.depth < limit:
-            neighbors = list(neighbors_for_packs(node.state))
-            for neighbor in neighbors:
-                neighbor = list(neighbor)
-                # neighbor = sorted(neighbor, key=lambda x: x[1], reverse=True)
-                if not stackFrontier.contains_state(neighbor) and neighbor not in explored:
-                    child = Node(state=neighbor, parent=node, depth=node.depth+1)
-                    stackFrontier.add(child)
-            counter += 1
+
+    for i in range(len(neighbors)):
+        child = Node(state=neighbors[i], parent=node, depth=node.depth+1)
+        result = sort_and_categorize_by_color(child, limit - 1)
+        if result is not None:
+            return result
 
 def neighbors_for_packs(state):
     neighbors = list()
-    print(state)
     for i in range(len(state) - 1):
-        for j in range(i+1,len(state)):
+        for j in range(i+1, len(state)):
             origin = None
             destination = None
             mark = 0
@@ -99,9 +103,7 @@ def neighbors_for_packs(state):
                 temp_packs = deepcopy(state)
                 card = temp_packs[origin].pop(0)
                 temp_packs[destination].insert(0, card)
-                print(temp_packs)
                 neighbors.append(temp_packs)
-    print("*********")
     return neighbors
 
 if __name__ == "__main__":
